@@ -11,7 +11,7 @@ Plain HTML, CSS and JavaScript, no framework and no runtime dependencies. Capaci
 - One state object, `S`, per profile, saved to `localStorage` on every change by `save()`.
 - Profiles live in a separate list, `U`. Each profile has its own key, goal, optional avatar and optional PIN hash.
 - `migrate()` upgrades old saves in place, for example adding new equipment once.
-- The goal is stored on the profile entry and re-applied on load, so a default state never overrides it.
+- The profile entry stores the goal, and the app re-applies it on load so a default state never overrides it.
 
 ## Rendering
 
@@ -22,7 +22,7 @@ Plain HTML, CSS and JavaScript, no framework and no runtime dependencies. Capaci
 ## Layouts
 
 - Portrait phone: single column, floating glass tab bar.
-- Large landscape: a dedicated home layout, a vertical tab capsule on the left and a zoomed canvas.
+- Large landscape: a separate home layout, a vertical tab capsule on the left, and a zoomed canvas.
 - Navigation uses a sliding pill driven by a CSS variable, in both orientations.
 
 ## Theming

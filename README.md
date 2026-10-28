@@ -15,7 +15,7 @@ Download the latest APK from the [releases page](https://github.com/AbhishekSrin
 - A workout player with rest timer, previous numbers, rest-pause and drop-set prompts, and swap or skip
 - A recovery check that moves exercises around when a muscle is still sore from a recent session
 - A 12-week size program plus single sessions for chest, back, shoulders, arms and abs, searchable by name or original title
-- Focus mode: tap muscles on a body map and get a workout built from matching exercises
+- Focus mode builds a workout from the muscles you tap on a body map
 - Stretch, mobility, warm-up and cool-down routines
 - Gym and home modes with their own equipment lists
 - Weekly schedule with drag to reorder and away periods
@@ -68,7 +68,7 @@ More in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Data
 
-Everything is stored in the app's local storage: workouts, profiles, settings and PIN hashes. The Android app makes no network calls and bundles its fonts, so it works offline. Use Menu > Backup and data to export a copy, since clearing app data wipes it. The PIN keeps other people out of a profile but is not strong security. The optional cloud sync only runs in the hosted web version and is switched off in the APK.
+The app keeps workouts, profiles, settings and PIN hashes in local storage. The Android app makes no network calls and bundles its fonts, so it works offline. Use Menu > Backup and data to export a copy, since clearing app data wipes it. The PIN keeps other people out of a profile but is not strong security. The optional cloud sync only runs in the hosted web version and is switched off in the APK.
 
 ## To do
 
@@ -79,6 +79,6 @@ Everything is stored in the app's local storage: workouts, profiles, settings an
 
 ## Credits
 
-Program ideas are credited inside the app: Jim Stoppani, Abel Albonetti, Arnold Schwarzenegger, Jeff Nippard, Mike Israetel, Robyn Machado, Chad Hollmer and ATHLEAN-X. The text and figures are my own.
+The app credits the program ideas to Jim Stoppani, Abel Albonetti, Arnold Schwarzenegger, Jeff Nippard, Mike Israetel, Robyn Machado, Chad Hollmer and ATHLEAN-X. I wrote the text and drew the figures myself.
 
 No license yet. Open an issue if you want to use it.
