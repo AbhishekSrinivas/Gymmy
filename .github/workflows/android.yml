@@ -5,6 +5,13 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
+concurrency:
+  group: apk-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   apk:
     runs-on: ubuntu-latest
@@ -50,3 +57,14 @@ jobs:
           name: gymmy-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+
+      - name: Publish as the latest release
+        if: github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp android/app/build/outputs/apk/debug/app-debug.apk Gymmy.apk
+          gh release delete latest --cleanup-tag --yes || true
+          gh release create latest Gymmy.apk \
+            --title "Gymmy (latest build)" \
+            --notes "Debug APK built from commit ${GITHUB_SHA::7}. Download Gymmy.apk, open it on an Android device and allow installs from this source."
