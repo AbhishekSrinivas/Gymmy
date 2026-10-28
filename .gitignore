@@ -1,0 +1,4 @@
+node_modules/
+android/
+src/_chk.js
+*.keystore

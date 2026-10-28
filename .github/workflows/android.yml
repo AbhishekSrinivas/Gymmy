@@ -1,0 +1,52 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Build the web app
+        run: python3 src/build.py
+
+      - name: Install Capacitor
+        run: npm install
+
+      - name: Create the Android project
+        run: npx cap add android
+
+      - name: App icon and launcher assets
+        run: npx @capacitor/assets generate --android --iconBackgroundColor '#0A0C0E' --iconBackgroundColorDark '#0A0C0E'
+
+      - name: Allow vibration and keep the screen on during workouts
+        run: |
+          MANIFEST=android/app/src/main/AndroidManifest.xml
+          sed -i 's#<application#<uses-permission android:name="android.permission.VIBRATE" />\n    <uses-permission android:name="android.permission.WAKE_LOCK" />\n    <application#' "$MANIFEST"
+
+      - name: Sync web files into the app
+        run: npx cap sync android
+
+      - name: Build debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: gymmy-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
