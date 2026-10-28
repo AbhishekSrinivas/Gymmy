@@ -1,6 +1,6 @@
-# Architecture notes
+# Architecture
 
-Gymmy is deliberately small: plain HTML, CSS and JavaScript with no framework and no runtime dependencies. Capacitor only wraps the finished page in an Android WebView.
+Plain HTML, CSS and JavaScript, no framework and no runtime dependencies. Capacitor wraps the finished page in an Android WebView.
 
 ## Build
 
