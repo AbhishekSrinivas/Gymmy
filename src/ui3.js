@@ -253,13 +253,14 @@ function backupSheet(){
   <div class="field"><label for="imp">Paste a backup to restore</label><textarea id="imp" placeholder="Paste here"></textarea></div><button class="btn out" data-a="import">${UI.impAsk?'Tap again to replace everything':'Restore from pasted backup'}</button>
   <hr class="hr"><button class="btn out" data-a="sample">Load sample data to explore</button><button class="btn out" style="color:var(--red)" data-a="reset">${UI.resetAsk?'Tap again to erase everything':'Erase all data'}</button>`);
 }
-function rsRange(k){const n=NOW();if(k==='week'){const a=mondayOf(n);return [a,a+7*DAY]}const d=new Date(n);return [new Date(d.getFullYear(),d.getMonth(),1).getTime(),new Date(d.getFullYear(),d.getMonth()+1,1).getTime()]}
+function rsRange(k){const n=NOW();if(k==='day'){const a=startOfDay(n);return [a,a+DAY]}if(k==='week'){const a=mondayOf(n);return [a,a+7*DAY]}const d=new Date(n);return [new Date(d.getFullYear(),d.getMonth(),1).getTime(),new Date(d.getFullYear(),d.getMonth()+1,1).getTime()]}
 function rsCount(k){const [a,b]=rsRange(k),inn=x=>x.t>=a&&x.t<b;return {w:S.logs.filter(inn).length,h:S.water.filter(inn).length,m:(S.morn||[]).filter(inn).length+(S.wst||[]).filter(inn).length}}
 function rsLine(c){return c.w+' workout'+(c.w===1?'':'s')+', '+c.h+' water entr'+(c.h===1?'y':'ies')+', '+c.m+' stretch session'+(c.m===1?'':'s')}
 function resetSheet(){
-  const ask=UI.rsAsk;const wk=rsCount('week'),mo=rsCount('month');
+  const ask=UI.rsAsk;const dy=rsCount('day'),wk=rsCount('week'),mo=rsCount('month');
   const B=(k,t,sub,c)=>`<div class="card stack" style="gap:8px"><div><b>${t}</b><div class="sub">${sub}</div></div><button class="btn out" ${c?'':'disabled'} style="${ask===k?'color:var(--red)':''}" data-a="rs" data-v="${k}">${ask===k?'Tap again to confirm':'Reset '+t.toLowerCase()}</button></div>`;
   return SH('Reset',`<div class="note">Resetting cannot be undone. Copy a backup first in Backup and data if you might want this data again.</div>
+  ${B('day','Today','Clears '+rsLine(dy)+' from today.',dy.w+dy.h+dy.m)}
   ${B('week','This week','Mon to Sun. Clears '+rsLine(wk)+' and this week\'s plan.',wk.w+wk.h+wk.m+(S.plan?1:0))}
   ${B('month','This month','Clears '+rsLine(mo)+'.',mo.w+mo.h+mo.m)}
   <div class="card stack" style="gap:8px"><div><b>Whole app</b><div class="sub">Erases everything on this profile: history, records, badges, equipment, schedule and settings. You start again from the welcome page.</div></div><button class="btn out" style="color:var(--red)" data-a="reset">${UI.resetAsk?'Tap again to erase everything':'Erase everything'}</button></div>`);

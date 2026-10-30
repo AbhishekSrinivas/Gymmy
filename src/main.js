@@ -177,7 +177,7 @@ const ACT={
  rs(v){if(UI.rsAsk!==v){UI.rsAsk=v;render();return}const [a,b]=rsRange(v),out=x=>!(x.t>=a&&x.t<b);
   S.logs=S.logs.filter(out);S.water=S.water.filter(out);S.morn=(S.morn||[]).filter(out);S.wst=(S.wst||[]).filter(out);if(v==='week')S.plan=null;
   S.prs={};S.logs.forEach(l=>(l.ex||[]).forEach(e=>{let best=0;(e.sets||[]).forEach(s=>{if(s.w>0)best=Math.max(best,e1rm(s.w,s.r))});if(best>0&&(!S.prs[e.id]||best>S.prs[e.id]))S.prs[e.id]=best}));
-  save();UI.rsAsk=null;render();toast(v==='week'?'This week was reset':'This month was reset')},
+  save();UI.rsAsk=null;render();toast(v==='day'?'Today was reset':v==='week'?'This week was reset':'This month was reset')},
  reset(){if(!UI.resetAsk){UI.resetAsk=true;render();return}S=DEFAULT_STATE();save();UI.resetAsk=false;UI.sheet=null;UI.ob={step:0};UI.tab='home';UI.screen=null;render()}
 };
 function sampleData(){

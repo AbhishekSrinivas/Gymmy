@@ -68,7 +68,7 @@ More in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Data
 
-The app keeps workouts, profiles, settings and PIN hashes in local storage. The Android app makes no network calls and bundles its fonts, so it works offline. Use Menu > Backup and data to export a copy, since clearing app data wipes it. Menu > Reset clears the current week, the current month or the whole profile. The PIN keeps other people out of a profile but is not strong security. The optional cloud sync only runs in the hosted web version and is switched off in the APK.
+The app keeps workouts, profiles, settings and PIN hashes in local storage. The Android app makes no network calls and bundles its fonts, so it works offline. Use Menu > Backup and data to export a copy, since clearing app data wipes it. Menu > Reset clears today, the current week, the current month or the whole profile. The PIN keeps other people out of a profile but is not strong security. The optional cloud sync only runs in the hosted web version and is switched off in the APK.
 
 ## To do
 
