@@ -154,8 +154,9 @@ function drawerView(){
   ${R('user','Preferences','Units, tone, water goal, celebrations','sheet','prefs')}
   ${R('bolt','Band strength test','Find the right band for the rep range','sheet','band')}
   ${R('save','Backup and data','Copy your data out, paste it back in','sheet','backup')}
+  ${R('trash','Reset','Clear a week, a month or everything','sheet','reset')}
   ${R('info','Show tips again','Replay the first-time walkthroughs','tipsreset')}
-  <div class="sub" style="text-align:center;padding:8px">Everything stays on this device. No accounts, no tracking.</div><div class="sub" style="text-align:center;opacity:.7">Gymmy build 65</div></aside>`;
+  <div class="sub" style="text-align:center;padding:8px">Everything stays on this device. No accounts, no tracking.</div><div class="sub" style="text-align:center;opacity:.7">Gymmy build 66</div></aside>`;
 }
 /* ===== Onboarding / equipment ===== */
 function equipView(onb){
@@ -252,6 +253,17 @@ function backupSheet(){
   <div class="field"><label for="imp">Paste a backup to restore</label><textarea id="imp" placeholder="Paste here"></textarea></div><button class="btn out" data-a="import">${UI.impAsk?'Tap again to replace everything':'Restore from pasted backup'}</button>
   <hr class="hr"><button class="btn out" data-a="sample">Load sample data to explore</button><button class="btn out" style="color:var(--red)" data-a="reset">${UI.resetAsk?'Tap again to erase everything':'Erase all data'}</button>`);
 }
+function rsRange(k){const n=NOW();if(k==='week'){const a=mondayOf(n);return [a,a+7*DAY]}const d=new Date(n);return [new Date(d.getFullYear(),d.getMonth(),1).getTime(),new Date(d.getFullYear(),d.getMonth()+1,1).getTime()]}
+function rsCount(k){const [a,b]=rsRange(k),inn=x=>x.t>=a&&x.t<b;return {w:S.logs.filter(inn).length,h:S.water.filter(inn).length,m:(S.morn||[]).filter(inn).length+(S.wst||[]).filter(inn).length}}
+function rsLine(c){return c.w+' workout'+(c.w===1?'':'s')+', '+c.h+' water entr'+(c.h===1?'y':'ies')+', '+c.m+' stretch session'+(c.m===1?'':'s')}
+function resetSheet(){
+  const ask=UI.rsAsk;const wk=rsCount('week'),mo=rsCount('month');
+  const B=(k,t,sub,c)=>`<div class="card stack" style="gap:8px"><div><b>${t}</b><div class="sub">${sub}</div></div><button class="btn out" ${c?'':'disabled'} style="${ask===k?'color:var(--red)':''}" data-a="rs" data-v="${k}">${ask===k?'Tap again to confirm':'Reset '+t.toLowerCase()}</button></div>`;
+  return SH('Reset',`<div class="note">Resetting cannot be undone. Copy a backup first in Backup and data if you might want this data again.</div>
+  ${B('week','This week','Mon to Sun. Clears '+rsLine(wk)+' and this week\'s plan.',wk.w+wk.h+wk.m+(S.plan?1:0))}
+  ${B('month','This month','Clears '+rsLine(mo)+'.',mo.w+mo.h+mo.m)}
+  <div class="card stack" style="gap:8px"><div><b>Whole app</b><div class="sub">Erases everything on this profile: history, records, badges, equipment, schedule and settings. You start again from the welcome page.</div></div><button class="btn out" style="color:var(--red)" data-a="reset">${UI.resetAsk?'Tap again to erase everything':'Erase everything'}</button></div>`);
+}
 function bandSheet(){
   const last=S.bandTests.slice(-3).reverse();
   return SH('Band strength test',`<div class="sub">Do one set of a move with a band to near failure, then enter your reps. Gymmy tells you how to use that band.</div>
@@ -289,7 +301,7 @@ function swapSheet(){
 function sheetHtml(){
   const k=UI.sheet;if(!k)return '';
   if(k==='poststr')return postStrSheet();if(k==='water')return waterSheet();if(k==='recovery')return recoverySheet();if(k==='streak')return streakSheet();
-  if(k==='users')return usersSheet();if(k==='morning')return mornSheet();if(k==='away')return awaySheet();if(k==='remind')return remindSheet();if(k==='prefs')return prefsSheet();if(k==='backup')return backupSheet();
+  if(k==='users')return usersSheet();if(k==='morning')return mornSheet();if(k==='away')return awaySheet();if(k==='remind')return remindSheet();if(k==='prefs')return prefsSheet();if(k==='backup')return backupSheet();if(k==='reset')return resetSheet();
   if(k==='sched')return schedSheet();if(k==='planadd')return planAddSheet();if(k==='band')return bandSheet();if(k==='cardio')return cardioSheet();if(k==='editweek')return editWeekSheet();if(k==='jump')return jumpSheet();if(k==='swap')return swapSheet();
   if(k==='detail')return exDetail(UI.detail);if(k==='picker')return pickerView();
   return '';

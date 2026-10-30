@@ -612,6 +612,11 @@ html[data-gm=dark] .padwrap{background:transparent}
 .pothers{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 .pother{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:var(--tx)}
 
+/* dark mode: keep icon tiles readable */
+html[data-gm=dark] .eq .pic,html[data-gm=dark] .lrow .ic,html[data-gm=dark] .dic.sq{background:rgba(200,241,105,.14)}
+html[data-gm=dark] .eq .pic svg{stroke:#E9F4C8}
+html[data-gm=dark] .btn.out .dic svg,html[data-gm=dark] .btn.out svg{stroke:var(--tx)}
+
 </style></head><body>
 <div id="root"></div>
 <script>window.addEventListener("error",function(e){var r=document.getElementById("root");if(r&&!r.innerHTML.trim())r.innerHTML="<div style=\"padding:24px;font:14px system-ui\"><b>Gymmy hit an error.</b><br>"+String(e.message)+"</div>"})</script>
@@ -2358,8 +2363,9 @@ function drawerView(){
   ${R('user','Preferences','Units, tone, water goal, celebrations','sheet','prefs')}
   ${R('bolt','Band strength test','Find the right band for the rep range','sheet','band')}
   ${R('save','Backup and data','Copy your data out, paste it back in','sheet','backup')}
+  ${R('trash','Reset','Clear a week, a month or everything','sheet','reset')}
   ${R('info','Show tips again','Replay the first-time walkthroughs','tipsreset')}
-  <div class="sub" style="text-align:center;padding:8px">Everything stays on this device. No accounts, no tracking.</div><div class="sub" style="text-align:center;opacity:.7">Gymmy build 65</div></aside>`;
+  <div class="sub" style="text-align:center;padding:8px">Everything stays on this device. No accounts, no tracking.</div><div class="sub" style="text-align:center;opacity:.7">Gymmy build 66</div></aside>`;
 }
 /* ===== Onboarding / equipment ===== */
 function equipView(onb){
@@ -2456,6 +2462,17 @@ function backupSheet(){
   <div class="field"><label for="imp">Paste a backup to restore</label><textarea id="imp" placeholder="Paste here"></textarea></div><button class="btn out" data-a="import">${UI.impAsk?'Tap again to replace everything':'Restore from pasted backup'}</button>
   <hr class="hr"><button class="btn out" data-a="sample">Load sample data to explore</button><button class="btn out" style="color:var(--red)" data-a="reset">${UI.resetAsk?'Tap again to erase everything':'Erase all data'}</button>`);
 }
+function rsRange(k){const n=NOW();if(k==='week'){const a=mondayOf(n);return [a,a+7*DAY]}const d=new Date(n);return [new Date(d.getFullYear(),d.getMonth(),1).getTime(),new Date(d.getFullYear(),d.getMonth()+1,1).getTime()]}
+function rsCount(k){const [a,b]=rsRange(k),inn=x=>x.t>=a&&x.t<b;return {w:S.logs.filter(inn).length,h:S.water.filter(inn).length,m:(S.morn||[]).filter(inn).length+(S.wst||[]).filter(inn).length}}
+function rsLine(c){return c.w+' workout'+(c.w===1?'':'s')+', '+c.h+' water entr'+(c.h===1?'y':'ies')+', '+c.m+' stretch session'+(c.m===1?'':'s')}
+function resetSheet(){
+  const ask=UI.rsAsk;const wk=rsCount('week'),mo=rsCount('month');
+  const B=(k,t,sub,c)=>`<div class="card stack" style="gap:8px"><div><b>${t}</b><div class="sub">${sub}</div></div><button class="btn out" ${c?'':'disabled'} style="${ask===k?'color:var(--red)':''}" data-a="rs" data-v="${k}">${ask===k?'Tap again to confirm':'Reset '+t.toLowerCase()}</button></div>`;
+  return SH('Reset',`<div class="note">Resetting cannot be undone. Copy a backup first in Backup and data if you might want this data again.</div>
+  ${B('week','This week','Mon to Sun. Clears '+rsLine(wk)+' and this week\'s plan.',wk.w+wk.h+wk.m+(S.plan?1:0))}
+  ${B('month','This month','Clears '+rsLine(mo)+'.',mo.w+mo.h+mo.m)}
+  <div class="card stack" style="gap:8px"><div><b>Whole app</b><div class="sub">Erases everything on this profile: history, records, badges, equipment, schedule and settings. You start again from the welcome page.</div></div><button class="btn out" style="color:var(--red)" data-a="reset">${UI.resetAsk?'Tap again to erase everything':'Erase everything'}</button></div>`);
+}
 function bandSheet(){
   const last=S.bandTests.slice(-3).reverse();
   return SH('Band strength test',`<div class="sub">Do one set of a move with a band to near failure, then enter your reps. Gymmy tells you how to use that band.</div>
@@ -2493,7 +2510,7 @@ function swapSheet(){
 function sheetHtml(){
   const k=UI.sheet;if(!k)return '';
   if(k==='poststr')return postStrSheet();if(k==='water')return waterSheet();if(k==='recovery')return recoverySheet();if(k==='streak')return streakSheet();
-  if(k==='users')return usersSheet();if(k==='morning')return mornSheet();if(k==='away')return awaySheet();if(k==='remind')return remindSheet();if(k==='prefs')return prefsSheet();if(k==='backup')return backupSheet();
+  if(k==='users')return usersSheet();if(k==='morning')return mornSheet();if(k==='away')return awaySheet();if(k==='remind')return remindSheet();if(k==='prefs')return prefsSheet();if(k==='backup')return backupSheet();if(k==='reset')return resetSheet();
   if(k==='sched')return schedSheet();if(k==='planadd')return planAddSheet();if(k==='band')return bandSheet();if(k==='cardio')return cardioSheet();if(k==='editweek')return editWeekSheet();if(k==='jump')return jumpSheet();if(k==='swap')return swapSheet();
   if(k==='detail')return exDetail(UI.detail);if(k==='picker')return pickerView();
   return '';
@@ -3014,7 +3031,7 @@ const ACT={
  drawer(){UI.drawer=true;render()},drawerclose(){UI.drawer=false;render()},
  screen(v){UI.drawer=false;if(v==='prog'){UI.tab='lib';UI.lib.tab='prog';UI.screen=null}else{UI.screen=v;if(v==='equip')UI.eqprof='gym'}render()},
  back(){if(UI.screen==='preview'){UI.screen=UI.prev&&UI.prev.from&&UI.prev.from!=='preview'?UI.prev.from:null}else UI.screen=null;render()},
- sheet(v){UI.drawer=false;UI.sheet=v;if(v==='water')UI.wd=0;UI.uview=null;UI.uname=undefined;UI.upic=undefined;UI.delAsk=null;UI.impAsk=false;UI.resetAsk=false;render()},sheetclose:closeSheet,bgclose(){closeSheet()},pickclose(){UI.picker=null;UI.sheet=null;render()},
+ sheet(v){UI.drawer=false;UI.sheet=v;if(v==='water')UI.wd=0;UI.uview=null;UI.uname=undefined;UI.upic=undefined;UI.delAsk=null;UI.impAsk=false;UI.resetAsk=false;UI.rsAsk=null;render()},sheetclose:closeSheet,bgclose(){closeSheet()},pickclose(){UI.picker=null;UI.sheet=null;render()},
  wkoff(v){UI.wkoff=v==='0'?0:UI.wkoff+ +v;render()},sumoff(v){if(v==='0')UI.sumoff=0;else UI.sumoff=Math.min(0,UI.sumoff+ +v);render()},
  libtab(v){UI.lib.tab=v;UI.lib.sq='';UI.lib.n=20;render()},libmore(){UI.lib.n=(UI.lib.n||20)+20;render()},libhave(){UI.lib.have=!UI.lib.have;render()},libfopen(){UI.lib.fopen=!UI.lib.fopen;UI.lib.n=20;render()},libfclear(){Object.assign(UI.lib,{eq:'',mu:'',pt:'',have:false});render()},libeq(v){UI.lib.eq=UI.lib.eq===v?'':v;render()},libmu(v){UI.lib.mu=UI.lib.mu===v?'':v;render()},libpt(v){UI.lib.pt=UI.lib.pt===v?'':v;render()},libpart(v){UI.lib.part=v;render()},
  exdetail(v){UI.detail=v;UI.sheet='detail';render()},
@@ -3107,6 +3124,10 @@ const ACT={
  deluser(id){if(U.list.length<2)return;if(UI.delAsk!==id){UI.delAsk=id;render();return}UI.delAsk=null;
   try{localStorage.removeItem(keyFor(id))}catch(e){}syncDelete(id);const wasCur=id===U.cur;U.list=U.list.filter(x=>x.id!==id);(U.gone=U.gone||[]).push(id);
   if(wasCur){U.cur=U.list[0].id;KEY=keyFor(U.cur);load();UI.tab='home';UI.screen=null;UI.ob={step:0}}saveUsers();UI.uview=null;UI.uname=undefined;render();toast('Profile deleted')},
+ rs(v){if(UI.rsAsk!==v){UI.rsAsk=v;render();return}const [a,b]=rsRange(v),out=x=>!(x.t>=a&&x.t<b);
+  S.logs=S.logs.filter(out);S.water=S.water.filter(out);S.morn=(S.morn||[]).filter(out);S.wst=(S.wst||[]).filter(out);if(v==='week')S.plan=null;
+  S.prs={};S.logs.forEach(l=>(l.ex||[]).forEach(e=>{let best=0;(e.sets||[]).forEach(s=>{if(s.w>0)best=Math.max(best,e1rm(s.w,s.r))});if(best>0&&(!S.prs[e.id]||best>S.prs[e.id]))S.prs[e.id]=best}));
+  save();UI.rsAsk=null;render();toast(v==='week'?'This week was reset':'This month was reset')},
  reset(){if(!UI.resetAsk){UI.resetAsk=true;render();return}S=DEFAULT_STATE();save();UI.resetAsk=false;UI.sheet=null;UI.ob={step:0};UI.tab='home';UI.screen=null;render()}
 };
 function sampleData(){

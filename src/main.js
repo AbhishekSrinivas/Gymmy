@@ -81,7 +81,7 @@ const ACT={
  drawer(){UI.drawer=true;render()},drawerclose(){UI.drawer=false;render()},
  screen(v){UI.drawer=false;if(v==='prog'){UI.tab='lib';UI.lib.tab='prog';UI.screen=null}else{UI.screen=v;if(v==='equip')UI.eqprof='gym'}render()},
  back(){if(UI.screen==='preview'){UI.screen=UI.prev&&UI.prev.from&&UI.prev.from!=='preview'?UI.prev.from:null}else UI.screen=null;render()},
- sheet(v){UI.drawer=false;UI.sheet=v;if(v==='water')UI.wd=0;UI.uview=null;UI.uname=undefined;UI.upic=undefined;UI.delAsk=null;UI.impAsk=false;UI.resetAsk=false;render()},sheetclose:closeSheet,bgclose(){closeSheet()},pickclose(){UI.picker=null;UI.sheet=null;render()},
+ sheet(v){UI.drawer=false;UI.sheet=v;if(v==='water')UI.wd=0;UI.uview=null;UI.uname=undefined;UI.upic=undefined;UI.delAsk=null;UI.impAsk=false;UI.resetAsk=false;UI.rsAsk=null;render()},sheetclose:closeSheet,bgclose(){closeSheet()},pickclose(){UI.picker=null;UI.sheet=null;render()},
  wkoff(v){UI.wkoff=v==='0'?0:UI.wkoff+ +v;render()},sumoff(v){if(v==='0')UI.sumoff=0;else UI.sumoff=Math.min(0,UI.sumoff+ +v);render()},
  libtab(v){UI.lib.tab=v;UI.lib.sq='';UI.lib.n=20;render()},libmore(){UI.lib.n=(UI.lib.n||20)+20;render()},libhave(){UI.lib.have=!UI.lib.have;render()},libfopen(){UI.lib.fopen=!UI.lib.fopen;UI.lib.n=20;render()},libfclear(){Object.assign(UI.lib,{eq:'',mu:'',pt:'',have:false});render()},libeq(v){UI.lib.eq=UI.lib.eq===v?'':v;render()},libmu(v){UI.lib.mu=UI.lib.mu===v?'':v;render()},libpt(v){UI.lib.pt=UI.lib.pt===v?'':v;render()},libpart(v){UI.lib.part=v;render()},
  exdetail(v){UI.detail=v;UI.sheet='detail';render()},
@@ -174,6 +174,10 @@ const ACT={
  deluser(id){if(U.list.length<2)return;if(UI.delAsk!==id){UI.delAsk=id;render();return}UI.delAsk=null;
   try{localStorage.removeItem(keyFor(id))}catch(e){}syncDelete(id);const wasCur=id===U.cur;U.list=U.list.filter(x=>x.id!==id);(U.gone=U.gone||[]).push(id);
   if(wasCur){U.cur=U.list[0].id;KEY=keyFor(U.cur);load();UI.tab='home';UI.screen=null;UI.ob={step:0}}saveUsers();UI.uview=null;UI.uname=undefined;render();toast('Profile deleted')},
+ rs(v){if(UI.rsAsk!==v){UI.rsAsk=v;render();return}const [a,b]=rsRange(v),out=x=>!(x.t>=a&&x.t<b);
+  S.logs=S.logs.filter(out);S.water=S.water.filter(out);S.morn=(S.morn||[]).filter(out);S.wst=(S.wst||[]).filter(out);if(v==='week')S.plan=null;
+  S.prs={};S.logs.forEach(l=>(l.ex||[]).forEach(e=>{let best=0;(e.sets||[]).forEach(s=>{if(s.w>0)best=Math.max(best,e1rm(s.w,s.r))});if(best>0&&(!S.prs[e.id]||best>S.prs[e.id]))S.prs[e.id]=best}));
+  save();UI.rsAsk=null;render();toast(v==='week'?'This week was reset':'This month was reset')},
  reset(){if(!UI.resetAsk){UI.resetAsk=true;render();return}S=DEFAULT_STATE();save();UI.resetAsk=false;UI.sheet=null;UI.ob={step:0};UI.tab='home';UI.screen=null;render()}
 };
 function sampleData(){
