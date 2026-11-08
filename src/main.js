@@ -178,6 +178,7 @@ const ACT={
   S.logs=S.logs.filter(out);S.water=S.water.filter(out);S.morn=(S.morn||[]).filter(out);S.wst=(S.wst||[]).filter(out);if(v==='week')S.plan=null;
   S.prs={};S.logs.forEach(l=>(l.ex||[]).forEach(e=>{let best=0;(e.sets||[]).forEach(s=>{if(s.w>0)best=Math.max(best,e1rm(s.w,s.r))});if(best>0&&(!S.prs[e.id]||best>S.prs[e.id]))S.prs[e.id]=best}));
   save();UI.rsAsk=null;render();toast(v==='day'?'Today was reset':v==='week'?'This week was reset':'This month was reset')},
+ otacheck(){otaCheck(false)},otaapply(){otaApply()},
  reset(){if(!UI.resetAsk){UI.resetAsk=true;render();return}S=DEFAULT_STATE();save();UI.resetAsk=false;UI.sheet=null;UI.ob={step:0};UI.tab='home';UI.screen=null;render()}
 };
 function sampleData(){
@@ -315,3 +316,4 @@ if(!S.onboarded&&S.logs.length)S.onboarded=true;
 render();
 setTimeout(schedAsk,1200);
 setTimeout(checkReminders,2000);
+setTimeout(otaOk,4000);setTimeout(otaAuto,6000);

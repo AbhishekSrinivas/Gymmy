@@ -37,6 +37,14 @@ Download the latest APK from the [releases page](https://github.com/AbhishekSrin
 
 On Android, open the latest release, download `Gymmy.apk`, and allow installs from your browser or file manager when asked. The APK is rebuilt on every push to `main`. It is debug-signed, so installing a new one over the old one keeps your data.
 
+## Updates
+
+Open the menu and tap **App updates** to check GitHub for a newer version. The app downloads the new web files and applies them when you restart it. It also checks by itself about twice a day when you are online. Your data stays on the phone. If an update fails to start, the app falls back to the version inside the APK.
+
+The update replaces the web app only. A release that changes the Android shell, such as a new permission, still needs a new APK from the latest release.
+
+To publish an update, raise the number in `src/version.js`, run `python3 src/build.py`, and push. The app compares that number with the one in `www/version.json`.
+
 You can also serve the `www` folder from any static host and add it to the home screen. Vibration does not work on iOS Safari.
 
 ## Build
@@ -58,7 +66,7 @@ The APK ends up in `android/app/build/outputs/apk/debug/`. Pushing to `main` or 
 
 ```
 src/        app source; build.py joins it into www/index.html
-www/        built page and bundled fonts (what the APK loads)
+www/        built page, version.json and bundled fonts (what the APK loads)
 assets/     launcher icon source
 docs/       screenshots and architecture notes
 .github/    APK build workflow
@@ -68,7 +76,7 @@ More in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Data
 
-The app keeps workouts, profiles, settings and PIN hashes in local storage. The Android app makes no network calls and bundles its fonts, so it works offline. Use Menu > Backup and data to export a copy, since clearing app data wipes it. Menu > Reset clears today, the current week, the current month or the whole profile. The PIN keeps other people out of a profile but is not strong security. The optional cloud sync only runs in the hosted web version and is switched off in the APK.
+The app keeps workouts, profiles, settings and PIN hashes in local storage. The Android app bundles its fonts and works offline. Its only network call is the update check, which reads two files from this repository. Use Menu > Backup and data to export a copy, since clearing app data wipes it. Menu > Reset clears today, the current week, the current month or the whole profile. The PIN keeps other people out of a profile but is not strong security. The optional cloud sync only runs in the hosted web version and is switched off in the APK.
 
 ## To do
 

@@ -155,8 +155,9 @@ function drawerView(){
   ${R('bolt','Band strength test','Find the right band for the rep range','sheet','band')}
   ${R('save','Backup and data','Copy your data out, paste it back in','sheet','backup')}
   ${R('trash','Reset','Clear a week, a month or everything','sheet','reset')}
+  ${window.claude?'':R('up','App updates',OTA.st==='ready'?'Update ready, tap to restart':'Check GitHub for a newer version','sheet','update')}
   ${R('info','Show tips again','Replay the first-time walkthroughs','tipsreset')}
-  <div class="sub" style="text-align:center;padding:8px">Everything stays on this device. No accounts, no tracking.</div><div class="sub" style="text-align:center;opacity:.7">Gymmy build 66</div></aside>`;
+  <div class="sub" style="text-align:center;padding:8px">Everything stays on this device. No accounts, no tracking.</div><div class="sub" style="text-align:center;opacity:.7">Gymmy build ${BUILD}</div></aside>`;
 }
 /* ===== Onboarding / equipment ===== */
 function equipView(onb){
@@ -302,7 +303,7 @@ function swapSheet(){
 function sheetHtml(){
   const k=UI.sheet;if(!k)return '';
   if(k==='poststr')return postStrSheet();if(k==='water')return waterSheet();if(k==='recovery')return recoverySheet();if(k==='streak')return streakSheet();
-  if(k==='users')return usersSheet();if(k==='morning')return mornSheet();if(k==='away')return awaySheet();if(k==='remind')return remindSheet();if(k==='prefs')return prefsSheet();if(k==='backup')return backupSheet();if(k==='reset')return resetSheet();
+  if(k==='users')return usersSheet();if(k==='morning')return mornSheet();if(k==='away')return awaySheet();if(k==='remind')return remindSheet();if(k==='prefs')return prefsSheet();if(k==='backup')return backupSheet();if(k==='reset')return resetSheet();if(k==='update')return updateSheet();
   if(k==='sched')return schedSheet();if(k==='planadd')return planAddSheet();if(k==='band')return bandSheet();if(k==='cardio')return cardioSheet();if(k==='editweek')return editWeekSheet();if(k==='jump')return jumpSheet();if(k==='swap')return swapSheet();
   if(k==='detail')return exDetail(UI.detail);if(k==='picker')return pickerView();
   return '';
