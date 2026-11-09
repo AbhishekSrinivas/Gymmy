@@ -1,6 +1,8 @@
 /* ===== Updates from GitHub =====
    The app downloads the newest web files from the repo and applies them on the next start.
    Changes to the Android shell (permissions, plugins) still need a new APK. */
+const APK_URL='https://github.com/AbhishekSrinivas/Gymmy/releases/download/latest/Gymmy.apk';
+const IS_NATIVE=(()=>{try{const C=window.Capacitor;return !!(C&&C.isNativePlatform&&C.isNativePlatform())}catch(e){return false}})();
 const OTA={repo:'AbhishekSrinivas/Gymmy',branch:'main',st:'idle',msg:'',latest:0};
 const otaUrl=f=>`https://raw.githubusercontent.com/${OTA.repo}/${OTA.branch}/www/${f}?t=${Date.now()}`;
 function otaPending(){try{const o=JSON.parse(localStorage.getItem('gymmy.ota')||'null');return o&&o.build>BUILD?o.build:0}catch(e){return 0}}
@@ -35,5 +37,5 @@ function updateSheet(){
   return SH('App updates',`<div class="card stack" style="gap:6px"><div><b>Installed</b> build ${BUILD}</div>${OTA.latest>BUILD||OTA.msg?`<div class="sub">${esc(OTA.msg||'')}</div>`:'<div class="sub">Tap check to look for a newer build on GitHub.</div>'}</div>
   ${rdy?'<button class="btn lime" data-a="otaapply">Restart to apply update</button>':`<button class="btn" data-a="otacheck" ${OTA.st==='busy'?'disabled':''}>${OTA.st==='busy'?'Checking...':'Check for updates'}</button>`}
   <div class="note g">Your workouts, profiles and settings stay on your phone. An update only replaces the app itself.</div>
-  <div class="sub">The app checks by itself about twice a day when you are online. Updates come from github.com/${OTA.repo}. If a release changes the Android app itself, <a href="https://github.com/${OTA.repo}/releases/latest" target="_blank" rel="noopener" style="color:var(--grn);font-weight:700">download the new APK</a> and install it over this one.</div>`);
+  <div class="sub">The app checks by itself about twice a day when you are online. Updates come from github.com/${OTA.repo}. If a release changes the Android app itself, <a href="https://github.com/${OTA.repo}/releases/download/latest/Gymmy.apk" download target="_blank" rel="noopener" style="color:var(--grn);font-weight:700">download the new APK</a> and install it over this one.</div>`);
 }

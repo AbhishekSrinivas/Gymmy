@@ -156,6 +156,7 @@ function drawerView(){
   ${R('save','Backup and data','Copy your data out, paste it back in','sheet','backup')}
   ${R('trash','Reset','Clear a week, a month or everything','sheet','reset')}
   ${window.claude?'':R('up','App updates',OTA.st==='ready'?'Update ready, tap to restart':'Check GitHub for a newer version','sheet','update')}
+  ${IS_NATIVE?'':`<a class="lrow" href="${APK_URL}" download target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><span class="ic">${ico('save',18,'#4E7A12')}</span><div class="sp1"><b>Download Android APK</b><small>Android only. iPhone and iPad keep using this page.</small></div>${ico('chev',16,'#9AA9B4')}</a>`}
   ${R('info','Show tips again','Replay the first-time walkthroughs','tipsreset')}
   <div class="sub" style="text-align:center;padding:8px">Everything stays on this device. No accounts, no tracking.</div><div class="sub" style="text-align:center;opacity:.7">Gymmy build ${BUILD}</div></aside>`;
 }
@@ -173,7 +174,9 @@ function onboardView(){
    <div style="font-family:'Barlow Condensed';font-weight:700;font-size:64px;line-height:.9">GYMMY</div><div style="font-size:16px;color:var(--mut)">A private workout guide that lives on your device. No accounts, no tracking.</div>
    <div class="sec" style="padding-top:16px">What is your goal right now?</div>
    ${[['bulk','Bulk','Build size. Heavier sets, longer rest.'],['shred','Shred','Lean out. Shorter rest, cardio bursts between sets.'],['maintain','Maintain','Hold what you built. Balanced volume.']].map(([k,t,d])=>`<button class="lrow" style="${S.goal===k?'outline:3px solid var(--ink)':''}" data-a="goal" data-v="${k}"><div class="sp1"><b style="font-size:17px">${t}</b><small>${d}</small></div>${S.goal===k?ico('check',20):''}</button>`).join('')}
-   <div class="sub">You can switch any time from the menu.</div><button class="btn" data-a="obnext">Next: your equipment</button></div>`;
+   <div class="sub">You can switch any time from the menu.</div>
+   ${IS_NATIVE?'':`<div class="note g"><b>Android:</b> you can <a href="${APK_URL}" download target="_blank" rel="noopener" style="color:inherit;font-weight:700;text-decoration:underline">download the APK</a> to install Gymmy as an app. <b>iPhone and iPad:</b> Apple does not allow installing APK files, so keep using Gymmy in your browser.</div>`}
+   <button class="btn" data-a="obnext">Next: your equipment</button></div>`;
   if(UI.ob.step===2)return `<div class="top"><div class="sp1"><div class="h1">Your week</div><div class="sub">Gym days, home days and rest days</div></div></div><div class="stack">${schedBody(true)}</div>`;
   return equipView(true);
 }
