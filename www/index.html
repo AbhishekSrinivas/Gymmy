@@ -2371,7 +2371,7 @@ function drawerView(){
   ${R('save','Backup and data','Copy your data out, paste it back in','sheet','backup')}
   ${R('trash','Reset','Clear a week, a month or everything','sheet','reset')}
   ${window.claude?'':R('up','App updates',OTA.st==='ready'?'Update ready, tap to restart':'Check GitHub for a newer version','sheet','update')}
-  ${IS_NATIVE?'':`<a class="lrow" href="${APK_URL}" download target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><span class="ic">${ico('save',18,'#4E7A12')}</span><div class="sp1"><b>Download Android APK</b><small>Android only. iPhone and iPad keep using this page.</small></div>${ico('chev',16,'#9AA9B4')}</a>`}
+  ${IS_NATIVE?'':`<a class="lrow" href="${APK_URL}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><span class="ic">${ico('save',18,'#4E7A12')}</span><div class="sp1"><b>Download Android APK</b><small>Android only. iPhone and iPad keep using this page.</small></div>${ico('chev',16,'#9AA9B4')}</a>`}
   ${R('info','Show tips again','Replay the first-time walkthroughs','tipsreset')}
   <div class="sub" style="text-align:center;padding:8px">Everything stays on this device. No accounts, no tracking.</div><div class="sub" style="text-align:center;opacity:.7">Gymmy build ${BUILD}</div></aside>`;
 }
@@ -2390,7 +2390,7 @@ function onboardView(){
    <div class="sec" style="padding-top:16px">What is your goal right now?</div>
    ${[['bulk','Bulk','Build size. Heavier sets, longer rest.'],['shred','Shred','Lean out. Shorter rest, cardio bursts between sets.'],['maintain','Maintain','Hold what you built. Balanced volume.']].map(([k,t,d])=>`<button class="lrow" style="${S.goal===k?'outline:3px solid var(--ink)':''}" data-a="goal" data-v="${k}"><div class="sp1"><b style="font-size:17px">${t}</b><small>${d}</small></div>${S.goal===k?ico('check',20):''}</button>`).join('')}
    <div class="sub">You can switch any time from the menu.</div>
-   ${IS_NATIVE?'':`<div class="note g"><b>Android:</b> you can <a href="${APK_URL}" download target="_blank" rel="noopener" style="color:inherit;font-weight:700;text-decoration:underline">download the APK</a> to install Gymmy as an app. <b>iPhone and iPad:</b> Apple does not allow installing APK files, so keep using Gymmy in your browser.</div>`}
+   ${IS_NATIVE?'':`<div class="note g"><b>Android:</b> you can <a href="${APK_URL}" target="_blank" rel="noopener" style="color:inherit;font-weight:700;text-decoration:underline">download the APK</a> to install Gymmy as an app. <b>iPhone and iPad:</b> Apple does not allow installing APK files, so keep using Gymmy in your browser.</div>`}
    <button class="btn" data-a="obnext">Next: your equipment</button></div>`;
   if(UI.ob.step===2)return `<div class="top"><div class="sp1"><div class="h1">Your week</div><div class="sub">Gym days, home days and rest days</div></div></div><div class="stack">${schedBody(true)}</div>`;
   return equipView(true);
@@ -2998,7 +2998,7 @@ function updateSheet(){
   return SH('App updates',`<div class="card stack" style="gap:6px"><div><b>Installed</b> build ${BUILD}</div>${OTA.latest>BUILD||OTA.msg?`<div class="sub">${esc(OTA.msg||'')}</div>`:'<div class="sub">Tap check to look for a newer build on GitHub.</div>'}</div>
   ${rdy?'<button class="btn lime" data-a="otaapply">Restart to apply update</button>':`<button class="btn" data-a="otacheck" ${OTA.st==='busy'?'disabled':''}>${OTA.st==='busy'?'Checking...':'Check for updates'}</button>`}
   <div class="note g">Your workouts, profiles and settings stay on your phone. An update only replaces the app itself.</div>
-  <div class="sub">The app checks by itself about twice a day when you are online. Updates come from github.com/${OTA.repo}. If a release changes the Android app itself, <a href="https://github.com/${OTA.repo}/releases/download/latest/Gymmy.apk" download target="_blank" rel="noopener" style="color:var(--grn);font-weight:700">download the new APK</a> and install it over this one.</div>`);
+  <div class="sub">The app checks by itself about twice a day when you are online. Updates come from github.com/${OTA.repo}. If a release changes the Android app itself, <a href="https://github.com/${OTA.repo}/releases/download/latest/Gymmy.apk" target="_blank" rel="noopener" style="color:var(--grn);font-weight:700">download the new APK</a> and install it over this one.</div>`);
 }
 
 /* ===== Main: render, events, timers, reminders ===== */
